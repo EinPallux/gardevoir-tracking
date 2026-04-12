@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useApp } from '@/lib/store';
-import { type Card, localImagePath, LANGUAGE_FLAGS } from '@/lib/cardDatabase';
+import { type Card, localImagePath, LANGUAGE_FLAGS, isArtworkCollected } from '@/lib/cardDatabase';
 import { Plus, Minus, CheckCircle, Circle, ArrowsClockwise, Cards } from '@phosphor-icons/react';
 
 interface CardItemProps {
@@ -35,6 +35,9 @@ export function CardItem({ card, index = 0 }: CardItemProps) {
   const qty = entry?.qty ?? 0;
   const isOwned = qty > 0;
   const isDupe = qty > 1;
+
+  // New check: Is the Artwork collected in ANY language?
+  const isArtworkOwned = isArtworkCollected(card.artworkGroup, state.collection);
 
   const statusColor = isDupe ? 'var(--trade-color)' : isOwned ? 'var(--owned-color)' : 'var(--border)';
 
@@ -145,6 +148,13 @@ export function CardItem({ card, index = 0 }: CardItemProps) {
             <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded font-bold trade-badge">
               <ArrowsClockwise size={9} weight="bold" />
               {t('duplicate_badge')} ×{qty - 1}
+            </span>
+          )}
+          {/* VISUAL BADGE for your specific collection tracker style */}
+          {!isOwned && isArtworkOwned && (
+            <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded font-bold"
+              style={{ border: '1px solid var(--owned-color)', color: 'var(--owned-color)', background: 'var(--bg-elevated)' }}>
+              Artwork Owned
             </span>
           )}
         </div>
