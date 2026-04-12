@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useApp } from '@/lib/store';
 import { CARD_DATABASE } from '@/lib/cardDatabase';
 import {
-  X, Sun, Moon, Desktop, Globe, DownloadSimple, UploadSimple, Trash, Warning,
+  X, Sun, Moon, Desktop, Globe, DownloadSimple, UploadSimple, Trash,
 } from '@phosphor-icons/react';
 
 interface SettingsModalProps {
@@ -17,10 +17,21 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
   const { state, dispatch, t } = useApp();
   const importRef = useRef<HTMLInputElement>(null);
 
-  const ownedCount = Object.keys(state.collection).length;
+  // Standard Card Stats
+  const ownedIds = Object.keys(state.collection).filter(id => state.collection[id].qty > 0);
+  const ownedCount = ownedIds.length;
   const neededCount = CARD_DATABASE.length - ownedCount;
   const dupeCount = Object.values(state.collection).filter(e => e.qty > 1).reduce((s, e) => s + e.qty - 1, 0);
-  const pct = Math.round((ownedCount / CARD_DATABASE.length) * 100);
+  const pct = Math.round((ownedCount / CARD_DATABASE.length) * 100) || 0;
+
+  // Unique Artwork Stats (Cross-language)
+  const uniqueArtworksOwned = new Set(
+    ownedIds
+      .map(id => CARD_DATABASE.find(c => c.id === id)?.artworkGroup)
+      .filter(Boolean)
+  ).size;
+  const totalUniqueArtworks = new Set(CARD_DATABASE.map(c => c.artworkGroup)).size;
+  const artworkPct = Math.round((uniqueArtworksOwned / totalUniqueArtworks) * 100) || 0;
 
   function handleExport() {
     const data = { version: 1, exportedAt: new Date().toISOString(), collection: state.collection };
@@ -73,7 +84,7 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
 
           {/* Panel — slides up from bottom on mobile, appears right-aligned on desktop */}
           <motion.div
-            className="fixed z-50 bottom-0 left-0 right-0 md:bottom-auto md:top-16 md:right-4 md:left-auto md:w-80 rounded-t-3xl md:rounded-2xl overflow-hidden"
+            className="fixed z-50 bottom-0 left-0 right-0 md:bottom-auto md:top-16 md:right-4 md:left-auto md:w-[360px] rounded-t-3xl md:rounded-2xl overflow-hidden"
             style={{
               background: 'var(--bg-card)',
               border: '1px solid var(--border)',
@@ -157,10 +168,12 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
               <section>
                 <SectionLabel icon="📊" label="COLLECTION STATS" />
                 <div className="grid grid-cols-2 gap-2">
-                  <StatTile label="Owned" value={ownedCount} color="var(--owned-color)" />
-                  <StatTile label="Missing" value={neededCount} color="var(--needed-color)" />
+                  <StatTile label="Artworks Owned" value={`${uniqueArtworksOwned} / ${totalUniqueArtworks}`} color="var(--owned-color)" />
+                  <StatTile label="Artwork Progress" value={`${artworkPct}%`} color="var(--accent)" />
+                  <StatTile label="Total Cards" value={ownedCount} color="var(--text-primary)" />
+                  <StatTile label="Master Progress" value={`${pct}%`} color="var(--text-primary)" />
+                  <StatTile label="Missing Cards" value={neededCount} color="var(--needed-color)" />
                   <StatTile label="Duplicates" value={dupeCount} color="var(--trade-color)" />
-                  <StatTile label="Progress" value={`${pct}%`} color="var(--accent)" />
                 </div>
               </section>
 
@@ -216,7 +229,7 @@ function SectionLabel({ icon, label }: { icon: string; label: string }) {
 
 function StatTile({ label, value, color }: { label: string; value: string | number; color: string }) {
   return (
-    <div className="p-3 rounded-xl" style={{ background: 'var(--bg-elevated)' }}>
+    <div className="p-3 rounded-xl border" style={{ background: 'var(--bg-elevated)', borderColor: 'var(--border)' }}>
       <div className="text-xl font-black font-mono" style={{ color }}>{value}</div>
       <div className="text-xs mt-0.5" style={{ color: 'var(--text-muted)' }}>{label}</div>
     </div>

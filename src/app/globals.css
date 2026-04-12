@@ -32,6 +32,15 @@
   --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
   --shadow-lg: 0 10px 30px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.06);
+
+  /* Light theme rarity gradients (darker for high contrast on light bg) */
+  --sir-color-1: #c2185b;
+  --sir-color-2: #7b1fa2;
+  --sir-color-3: #1976d2;
+  --hyper-color-1: #b98600;
+  --hyper-color-2: #d84315;
+  --secret-color-1: #b98600;
+  --secret-color-2: #616161;
 }
 
 .dark {
@@ -57,6 +66,15 @@
   --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
   --shadow-md: 0 4px 12px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.2);
   --shadow-lg: 0 10px 30px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);
+
+  /* Dark theme rarity gradients (bright & pastel for dark bg) */
+  --sir-color-1: #f48fb1;
+  --sir-color-2: #ce93d8;
+  --sir-color-3: #90caf9;
+  --hyper-color-1: #ffd700;
+  --hyper-color-2: #ff8c00;
+  --secret-color-1: #ffd700;
+  --secret-color-2: #c0c0c0;
 }
 
 * {
@@ -146,24 +164,29 @@ body {
 .rarity-ultra-rare { color: #ff7043; }
 .rarity-double-rare { color: #ef5350; }
 .rarity-illustration-rare { color: #ab47bc; }
+
+/* Gradient Rarities using Dynamic Variables */
 .rarity-special-illustration-rare { 
-  background: linear-gradient(135deg, #f48fb1, #ce93d8, #90caf9);
+  background: linear-gradient(135deg, var(--sir-color-1), var(--sir-color-2), var(--sir-color-3));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: 800; /* Extra bold prevents gradient text from looking thin/faded */
 }
 .rarity-hyper-rare {
-  background: linear-gradient(135deg, #ffd700, #ff8c00, #ffd700);
+  background: linear-gradient(135deg, var(--hyper-color-1), var(--hyper-color-2), var(--hyper-color-1));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: 800;
   animation: shimmer 2s ease infinite;
 }
 .rarity-secret-rare {
-  background: linear-gradient(135deg, #ffd700, #c0c0c0);
+  background: linear-gradient(135deg, var(--secret-color-1), var(--secret-color-2));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  font-weight: 800;
 }
 
 /* Reduced motion */
