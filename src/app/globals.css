@@ -174,3 +174,36 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── PWA / Safe area support ─────────────────────────────────────────── */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Extra bottom padding for mobile nav + home indicator */
+.mobile-scroll-pad {
+  padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+}
+
+@media (min-width: 768px) {
+  .mobile-scroll-pad {
+    padding-bottom: 2rem;
+  }
+}
+
+/* Card image aspect ratio */
+.card-image-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 0.716; /* standard Pokemon card 63.5 × 88.9 mm */
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+/* Convention mode full-screen safe padding */
+.convention-safe {
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}

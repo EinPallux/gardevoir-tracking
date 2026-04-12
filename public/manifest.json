@@ -1,0 +1,27 @@
+{
+  "name": "Gardevoir TCG Master Tracker",
+  "short_name": "GardéTracker",
+  "description": "Track your complete Gardevoir Pokémon TCG master collection",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f0e0d",
+  "theme_color": "#f06292",
+  "orientation": "portrait-primary",
+  "categories": ["games", "utilities"],
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    }
+  ],
+  "screenshots": [],
+  "prefer_related_applications": false
+}
