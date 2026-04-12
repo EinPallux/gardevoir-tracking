@@ -1,12 +1,11 @@
 // ============================================================
 // GARDEVOIR TCG MASTER DATABASE — Fully Verified
-// Sources: Bulbapedia, pokecardsdatabase.com, Limitless TCG,
+// Sources: Bulbapedia, pkmn.gg, Limitless TCG,
 //          DigitalTQ, PokémonWizard, PriceCharting (Apr 2026)
 // ============================================================
 // IMAGE SYSTEM: Local images in /public/cards/
-// Naming: g.{cardNumber}.{setTotal}.{ext}
-// e.g. card 245/198 → g.245.198.png
-// Special: g.RC10.RC25.png, g.TG05.30.png, g.SV75.94.png
+// Naming: {setCode}-{cardNumber}.png (pkmn.gg format)
+// e.g. card 245/198 → sv1-245.png
 // ============================================================
 
 export type Language = 'EN' | 'JP' | 'DE' | 'KO' | 'ZHTW';
@@ -43,22 +42,24 @@ export interface Card {
   notes?: string;
 }
 
-// Helper: build local image path from card number
-// Format: /cards/g.{cardNum}.{setTotal}.png (or .jpg)
-// Make sure images are inside /public/cards/
+// ══════════════════════════════════════════════════════════
+// IMAGE SYSTEM
+// Now completely adapted to the pkmn.gg file naming structure!
+// ══════════════════════════════════════════════════════════
 export function localImagePath(card: Card): string {
-  return `/cards/g.${card.cardNum}.${card.setTotal}.png`;
+  // Format: /cards/{setCode}-{cardNum}.png 
+  // Make sure your files in public/cards/ are named like "sv1-86.png" or "exss-96.png"
+  return `/cards/${card.setCode.toLowerCase()}-${card.cardNum.toLowerCase()}.png`;
 }
 
 // ══════════════════════════════════════════════════════════
-// BASE CARDS - We define the 60 canonical unique cards here.
-// Below, we will dynamically generate the Japanese, German,
-// Korean, and Chinese versions for all of them!
+// BASE CARDS 
 // ══════════════════════════════════════════════════════════
 const BASE_CARDS: Card[] = [
   // EX ERA (2003–2007)
   { id: 'exrs-7', name: 'Gardevoir', set: 'EX Ruby & Sapphire', setCode: 'exrs', number: '7/109', cardNum: '7', setTotal: '109', language: 'EN', rarity: 'Rare Holo', price: 18, artist: 'Ken Sugimori', type: 'Psychic', era: 'EX', artworkGroup: 'exrs-7', releaseYear: 2003 },
   { id: 'exss-96', name: 'Gardevoir ex', set: 'EX Sandstorm', setCode: 'exss', number: '96/100', cardNum: '96', setTotal: '100', language: 'EN', rarity: 'Rare Holo EX', price: 100, type: 'Psychic', era: 'EX', artworkGroup: 'exss-96', releaseYear: 2003 },
+  { id: 'tk2-4', name: 'Gardevoir', set: 'EX Trainer Kit: Latias', setCode: 'tk2', number: '4/10', cardNum: '4', setTotal: '10', language: 'EN', rarity: 'Rare Holo', price: 10, type: 'Psychic', era: 'EX', artworkGroup: 'tk2-4', releaseYear: 2004, notes: 'Latias Half Deck' },
   { id: 'exem-4', name: 'Gardevoir', set: 'EX Emerald', setCode: 'exem', number: '4/106', cardNum: '4', setTotal: '106', language: 'EN', rarity: 'Rare Holo', price: 22, type: 'Psychic', era: 'EX', artworkGroup: 'exem-4', releaseYear: 2005 },
   { id: 'exds-6', name: 'Gardevoir δ', set: 'EX Delta Species', setCode: 'exds', number: '6/113', cardNum: '6', setTotal: '113', language: 'EN', rarity: 'Rare Holo', price: 28, type: 'Psychic/Metal', era: 'EX', artworkGroup: 'exds-6', releaseYear: 2005, notes: 'Delta Species — dual Psychic/Metal' },
   { id: 'exdf-93', name: 'Gardevoir ex δ', set: 'EX Dragon Frontiers', setCode: 'exdf', number: '93/101', cardNum: '93', setTotal: '101', language: 'EN', rarity: 'Rare Holo EX', price: 45, type: 'Fire', era: 'EX', artworkGroup: 'exdf-93', releaseYear: 2006, notes: 'Delta Species — Fire type' },
@@ -119,6 +120,7 @@ const BASE_CARDS: Card[] = [
   { id: 'sve-140', name: 'Gardevoir ex', set: 'Paldea Evolved', setCode: 'sve', number: '140/193', cardNum: '140', setTotal: '193', language: 'EN', rarity: 'Double Rare', price: 8, type: 'Psychic', era: 'SV', artworkGroup: 'sve-140', releaseYear: 2023 },
   { id: 'obf-140', name: 'Gardevoir ex', set: 'Obsidian Flames', setCode: 'obf', number: '140/197', cardNum: '140', setTotal: '197', language: 'EN', rarity: 'Double Rare', price: 5, type: 'Psychic', era: 'SV', artworkGroup: 'obf-140', releaseYear: 2023 },
   { id: 'obf-200', name: 'Gardevoir ex', set: 'Obsidian Flames', setCode: 'obf', number: '200/197', cardNum: '200', setTotal: '197', language: 'EN', rarity: 'Special Illustration Rare', price: 45, type: 'Psychic', era: 'SV', artworkGroup: 'obf-200', isSecret: true, releaseYear: 2023, notes: 'SIR — Toshinao Aoki art' },
+  { id: 'sv4a-328', name: 'Gardevoir ex', set: 'Shiny Treasure ex', setCode: 'sv4a', number: '328/190', cardNum: '328', setTotal: '190', language: 'JP', rarity: 'Special Illustration Rare', price: 45, type: 'Psychic', era: 'SV', artworkGroup: 'sv4a-328', isSecret: true, releaseYear: 2023, notes: 'Japanese Shiny Treasure ex SIR' },
   { id: 'paf-29', name: 'Gardevoir ex', set: 'Paldean Fates', setCode: 'paf', number: '29/91', cardNum: '29', setTotal: '91', language: 'EN', rarity: 'Double Rare', price: 4, type: 'Psychic', era: 'SV', artworkGroup: 'paf-29', releaseYear: 2024, notes: 'Shiny version' },
   { id: 'paf-217', name: 'Gardevoir ex', set: 'Paldean Fates', setCode: 'paf', number: '217/91', cardNum: '217', setTotal: '91', language: 'EN', rarity: 'Shiny Ultra Rare', price: 8, type: 'Psychic', era: 'SV', artworkGroup: 'paf-217', isSecret: true, releaseYear: 2024, notes: 'Shiny Ultra Rare' },
   { id: 'paf-233', name: 'Gardevoir ex', set: 'Paldean Fates', setCode: 'paf', number: '233/91', cardNum: '233', setTotal: '91', language: 'EN', rarity: 'Special Illustration Rare', price: 122, artist: 'Jiro Sasumo', type: 'Psychic', era: 'SV', artworkGroup: 'paf-233', isSecret: true, releaseYear: 2024, notes: 'Shiny SIR — Jiro Sasumo' },
