@@ -140,9 +140,11 @@ export function CardItem({ card, index = 0 }: CardItemProps) {
         </div>
 
         <div className="flex flex-wrap gap-1 mb-auto">
-          <span className={`text-xs px-1.5 py-0.5 rounded ${rarityClass(card.rarity)}`}
-            style={{ background: 'var(--bg-elevated)' }}>
-            {card.rarity}
+          {/* THE FIX: Isolate the layout background from the text color class */}
+          <span className="text-xs px-1.5 py-0.5 rounded" style={{ background: 'var(--bg-elevated)' }}>
+            <span className={rarityClass(card.rarity)}>
+              {card.rarity}
+            </span>
           </span>
           {isDupe && (
             <span className="inline-flex items-center gap-0.5 text-xs px-1.5 py-0.5 rounded font-bold trade-badge">
