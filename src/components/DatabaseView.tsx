@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { useApp } from '@/lib/store';
-import { CARD_DATABASE, ERAS, LANGUAGE_LABELS } from '@/lib/cardDatabase';
+import { CARD_DATABASE, ERAS, LANGUAGE_LABELS, isArtworkCollected } from '@/lib/cardDatabase';
 import type { Card } from '@/lib/cardDatabase';
 import { CardItem } from './CardItem';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -52,9 +52,14 @@ export function DatabaseView({ mode }: DatabaseViewProps) {
 
     // Ownership filter
     if (state.filterOwnership === 'owned') {
+      // Owned = this specific card is owned
       cards = cards.filter(c => (state.collection[c.id]?.qty ?? 0) > 0);
     } else if (state.filterOwnership === 'needed') {
-      cards = cards.filter(c => (state.collection[c.id]?.qty ?? 0) === 0);
+      // Needed = no copy of this card, AND no other language of same artwork is owned
+      cards = cards.filter(c =>
+        (state.collection[c.id]?.qty ?? 0) === 0 &&
+        !isArtworkCollected(c.artworkGroup, state.collection)
+      );
     } else if (state.filterOwnership === 'trades') {
       cards = cards.filter(c => (state.collection[c.id]?.qty ?? 0) > 1);
     }

@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { useApp } from '@/lib/store';
-import { CARD_DATABASE, ERAS, LANGUAGE_LABELS, getArtworkGroups, getCardsByArtworkGroup } from '@/lib/cardDatabase';
+import { CARD_DATABASE, ERAS, LANGUAGE_LABELS, getArtworkGroups, isArtworkCollected } from '@/lib/cardDatabase';
 import type { Card } from '@/lib/cardDatabase';
 import { motion } from 'framer-motion';
 import {
@@ -49,6 +49,9 @@ export function StatsView() {
     const owned = CARD_DATABASE.filter(c => state.collection[c.id]?.qty > 0);
     const ownedCount = owned.length;
     const pct = ((ownedCount / total) * 100).toFixed(1);
+    // Cross-language: unique artworks where at least one language is owned
+    const allGroups = getArtworkGroups();
+    const collectedArtworks = allGroups.filter(g => isArtworkCollected(g, state.collection));
 
     const ownedValue = owned.reduce((s, c) => s + (c.price ?? 0), 0);
     const missingValue = CARD_DATABASE
@@ -61,11 +64,8 @@ export function StatsView() {
 
     // Artwork completion
     const groups = getArtworkGroups();
-    const ownedArtworks = groups.filter(g => {
-      const cards = getCardsByArtworkGroup(g);
-      return cards.some(c => state.collection[c.id]?.qty > 0);
-    });
-    const artPct = ((ownedArtworks.length / groups.length) * 100).toFixed(1);
+    const ownedArtworks = collectedArtworks;
+    const artPct = ((ownedArtworks.length / allGroups.length) * 100).toFixed(1);
 
     // By era breakdown
     const byEra = Object.entries(ERAS).map(([era, label]) => {
@@ -85,7 +85,7 @@ export function StatsView() {
     // Most valuable owned
     const mostValuable = [...owned].sort((a, b) => (b.price ?? 0) - (a.price ?? 0)).slice(0, 5);
 
-    return { total, ownedCount, pct, ownedValue, missingValue, dupes, artPct, ownedArtworks: ownedArtworks.length, totalArtworks: groups.length, byEra, byLang, mostValuable };
+    return { total, ownedCount, pct, ownedValue, missingValue, dupes, artPct, ownedArtworks: ownedArtworks.length, totalArtworks: allGroups.length, byEra, byLang, mostValuable };
   }, [state.collection]);
 
   return (
@@ -111,7 +111,7 @@ export function StatsView() {
           icon={Star}
           label={t('artworkCompletion')}
           value={`${stats.artPct}%`}
-          sub={`${stats.ownedArtworks} / ${stats.totalArtworks} artworks`}
+          sub={`${stats.ownedArtworks} / ${stats.totalArtworks} artworks (any lang)`}
           delay={0.1}
         />
         <StatCard
