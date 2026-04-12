@@ -1,0 +1,176 @@
+@import url('https://api.fontshare.com/v2/css?f[]=satoshi@700,500,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-satoshi: 'Satoshi', system-ui, sans-serif;
+  --font-jetbrains: 'JetBrains Mono', monospace;
+
+  /* Light theme tokens */
+  --bg-primary: #f8f7f5;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-elevated: #f0eeec;
+  --text-primary: #1a1714;
+  --text-secondary: #6b6560;
+  --text-muted: #9c9590;
+  --border: #e5e2de;
+  --border-strong: #d0ccc8;
+  --accent: #c2185b;
+  --accent-hover: #ad1457;
+  --accent-subtle: #fce4ec;
+  --accent-text: #880e4f;
+  --owned-color: #2e7d32;
+  --owned-bg: #e8f5e9;
+  --needed-color: #d32f2f;
+  --needed-bg: #ffebee;
+  --trade-color: #f57f17;
+  --trade-bg: #fff3e0;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.08), 0 2px 4px rgba(0,0,0,0.04);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.10), 0 4px 8px rgba(0,0,0,0.06);
+}
+
+.dark {
+  --bg-primary: #0f0e0d;
+  --bg-secondary: #1a1816;
+  --bg-card: #201e1c;
+  --bg-elevated: #272422;
+  --text-primary: #f5f0eb;
+  --text-secondary: #9e9590;
+  --text-muted: #6b6560;
+  --border: #2e2b28;
+  --border-strong: #3d3a36;
+  --accent: #f06292;
+  --accent-hover: #ec407a;
+  --accent-subtle: #2d1520;
+  --accent-text: #f48fb1;
+  --owned-color: #66bb6a;
+  --owned-bg: #0d2b0f;
+  --needed-color: #ef5350;
+  --needed-bg: #2b0d0d;
+  --trade-color: #ffb74d;
+  --trade-bg: #2b1e08;
+  --shadow: 0 1px 3px rgba(0,0,0,0.4), 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.35), 0 2px 4px rgba(0,0,0,0.2);
+  --shadow-lg: 0 10px 30px rgba(0,0,0,0.5), 0 4px 8px rgba(0,0,0,0.3);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  font-family: var(--font-satoshi);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100dvh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Utility classes */
+.card-surface {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+}
+
+.card-elevated {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+}
+
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-muted { color: var(--text-muted); }
+
+.accent { color: var(--accent); }
+.accent-bg { background-color: var(--accent); }
+.accent-subtle { background-color: var(--accent-subtle); }
+
+.owned-badge {
+  background: var(--owned-bg);
+  color: var(--owned-color);
+}
+.needed-badge {
+  background: var(--needed-bg);
+  color: var(--needed-color);
+}
+.trade-badge {
+  background: var(--trade-bg);
+  color: var(--trade-color);
+}
+
+/* Shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, var(--bg-card) 0%, var(--bg-elevated) 50%, var(--bg-card) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease infinite;
+}
+
+/* Rarity colors */
+.rarity-common { color: #9e9590; }
+.rarity-uncommon { color: #66bb6a; }
+.rarity-rare { color: #42a5f5; }
+.rarity-rare-holo { color: #7e57c2; }
+.rarity-ultra-rare { color: #ff7043; }
+.rarity-double-rare { color: #ef5350; }
+.rarity-illustration-rare { color: #ab47bc; }
+.rarity-special-illustration-rare { 
+  background: linear-gradient(135deg, #f48fb1, #ce93d8, #90caf9);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.rarity-hyper-rare {
+  background: linear-gradient(135deg, #ffd700, #ff8c00, #ffd700);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 2s ease infinite;
+}
+.rarity-secret-rare {
+  background: linear-gradient(135deg, #ffd700, #c0c0c0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
